@@ -125,7 +125,7 @@ export default class TableManager {
         return `
             <thead>
                 <tr>
-                    ${this.config.columns.map(col => `
+                    ${this.config.columns.filter(col => !col.hide).map(col => `
                         <th style="width: ${col.size ? col.size + 'px' : 'auto'}; text-align: ${col.align || 'left'};">
                             ${this._escapeHtml(col.caption)}
                         </th>
@@ -144,7 +144,7 @@ export default class TableManager {
         const rowId = row.UserName || row.id;
         return `
             <tr data-id="${rowId}">
-                ${this.config.columns.map(col => {
+                ${this.config.columns.filter(col => !col.hide).map(col => {
                     const cellContent = col.render ? col.render(row) : this._escapeHtml(row[col.id]);
                     return `<td style="text-align: ${col.align || 'left'};">${cellContent}</td>`;
                 }).join('')}
@@ -307,7 +307,7 @@ export default class TableManager {
     _addFilterRow(container, filter = {}) {
         const row = document.createElement('div');
         row.className = 'filter-row';
-        const filterableColumns = this.config.columns.filter(c => c.filterable);
+        const filterableColumns = this.config.columns.filter(c => c.filterable && !c.hide);
         row.innerHTML = `
             <select data-type="column">
                 <option value="">Select Column</option>
@@ -375,7 +375,7 @@ export default class TableManager {
     _addSortRow(container, sorter = {}) {
         const row = document.createElement('div');
         row.className = 'sort-row';
-        const sortableColumns = this.config.columns.filter(c => c.sortable);
+        const sortableColumns = this.config.columns.filter(c => c.sortable && !c.hide);
         row.innerHTML = `
             <select data-type="column">
                 <option value="">Select Column</option>
