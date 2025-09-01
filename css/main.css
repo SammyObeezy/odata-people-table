@@ -1,0 +1,77 @@
+/* --- Theme & Global Variables --- */
+:root {
+    /* Layout Colors */
+    --list-background: #f7f7f7;
+    --list-primary: #6b46c1;
+    --list-header-bg: #2f243a;
+    --list-white: #ffffff;
+    --list-hover-bg: #f9fafb;
+    --list-light-gray: #f3f4f6;
+    --list-modal-overlay: rgba(255,255,255,0.1);
+
+    /* Text & Background Colors */
+    --text-color-primary: #111827;
+    --text-color-secondary: #374151;
+    --text-color-muted: #6b7280;
+    --bg-color: var(--list-background);
+    --container-bg: var(--list-white);
+
+    /* Border & Shadow Colors */
+    --border-color: var(--list-border, #e5e7eb);
+    --shadow-color: rgba(0,0,0,0.1);
+
+    /* Sizing & Spacing */
+    --border-radius-md: 6px;
+    --border-radius-lg: 12px;
+
+    /* Re-alias for consistency */
+    --primary-color: var(--list-primary);
+}
+
+/* --- Reset & Base Styles --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color-primary);
+    background: var(--bg-color);
+}
+
+/* --- Layout --- */
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    background: var(--list-white);
+    min-height: 100vh;
+    box-shadow: 0 0 20px var(--shadow-color);
+    border-radius: var(--border-radius-lg);
+}
+
+.header {
+    background: var(--list-header-bg);
+    color: var(--list-white);
+    padding: 1rem 1.5rem;
+    border-top-left-radius: var(--border-radius-lg);
+    border-top-right-radius: var(--border-radius-lg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.main-content {
+    padding: 1.5rem;
+}
+
+/* --- Components --- */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.2rem;
+    font-weight: bold;
+}

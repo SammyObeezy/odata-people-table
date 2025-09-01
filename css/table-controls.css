@@ -1,0 +1,212 @@
+/* --- Header Action Buttons (Sort, Filter, Refresh) --- */
+.header-actions {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.header-action-btn {
+    background: none;
+    border: none;
+    color: var(--text-color-muted);
+    padding: 0.5rem; /* var(--list-padding-md) */
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease; /* var(--list-transition-all) */
+}
+
+.header-action-btn:hover {
+    background-color: var(--list-light-gray);
+    color: var(--text-color-primary);
+}
+
+.header-action-btn svg {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+/* --- Active Filter/Sort Badges --- */
+.badge {
+    display: none;
+    background-color: var(--list-badge-error, #b91c1c);
+    color: var(--list-white);
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 12px;
+    margin-left: 0.5rem;
+}
+
+.badge.active {
+    display: inline-flex;
+    align-items: center;
+}
+
+.badge-clear {
+    background: none;
+    border: none;
+    color: var(--list-white);
+    cursor: pointer;
+    padding: 0;
+    margin-left: 0.25rem; /* var(--list-gap-xs) */
+    opacity: 0.7; /* var(--list-opacity-fade) */
+    line-height: 0;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.badge-clear:hover {
+    opacity: 1;
+}
+
+/* --- Filter & Sort Modal Styles --- */
+.filter-modal .modal-content,
+.sort-modal .modal-content {
+    max-width: 650px;
+}
+
+.filter-modal .modal-header,
+.sort-modal .modal-header {
+    background-color: var(--list-header-bg);
+    color: var(--list-white);
+}
+
+.filter-modal .modal-header .modal-close,
+.sort-modal .modal-header .modal-close {
+    color: var(--list-white);
+    opacity: 0.7; /* var(--list-opacity-fade) */
+}
+
+.filter-modal .modal-header .modal-close:hover,
+.sort-modal .modal-header .modal-close:hover {
+    background-color: var(--list-modal-overlay);
+    opacity: 1;
+}
+
+.filter-modal .modal-body,
+.sort-modal .modal-body {
+    min-height: 200px;
+    padding: 1.5rem; /* var(--list-padding-xxxl) */
+}
+
+.filter-modal .modal-footer,
+.sort-modal .modal-footer {
+    background-color: #f9fafb;
+}
+
+.filter-row, .sort-row {
+    display: grid;
+    gap: 1rem;
+    align-items: flex-end;
+    margin-bottom: 1rem;
+}
+
+.filter-row {
+    grid-template-columns: 1fr 1fr 1fr auto;
+}
+
+.sort-row {
+    grid-template-columns: 1fr 1fr auto;
+}
+
+.filter-row label, .sort-row label,
+.filter-header label, .sort-header label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+.filter-row select, .filter-row input,
+.sort-row select {
+    width: 100%;
+    padding: 0.6rem; /* var(--list-padding-lg) */
+    border: 1px solid var(--list-border-input, #d1d5db);
+    border-radius: var(--border-radius-md);
+    font-size: 0.9rem;
+}
+
+.delete-filter-btn, .delete-sort-btn {
+    background: none;
+    border: none;
+    color: var(--list-error, #ef4444);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-filter-btn:hover, .delete-sort-btn:hover {
+    background-color: var(--list-error-light, #fee2e2);
+}
+
+.add-filter-btn, .add-sort-btn {
+    background: none;
+    border: none;
+    color: var(--list-primary);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 6px;
+}
+
+.add-filter-btn:hover, .add-sort-btn:hover {
+    background-color: var(--list-action-hover, #f5f3ff);
+}
+
+.add-filter-btn svg, .add-sort-btn svg {
+    width: 14px;
+    height: 14px;
+}
+
+.filter-header, .sort-header {
+    padding: 0 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* --- Modal Footer Buttons --- */
+.modal-footer .secondary-btn,
+.modal-footer .submit-btn {
+    padding: 0.6rem 1.2rem; /* var(--list-padding-lg) var(--list-padding-xxl) */
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s ease; /* var(--list-transition-all) */
+    border: 1px solid transparent;
+}
+
+.modal-footer .secondary-btn {
+    background: var(--list-white);
+    color: var(--text-color-secondary);
+    border-color: var(--border-color);
+}
+
+.modal-footer .secondary-btn:hover {
+    background-color: var(--list-hover-bg);
+    border-color: var(--list-border-input, #d1d5db);
+}
+
+.modal-footer .submit-btn {
+    background-color: var(--list-primary);
+    color: var(--list-white);
+    border-color: var(--list-primary);
+}
+
+.modal-footer .submit-btn:hover {
+    background-color: var(--primary-color-dark, #55379e);
+    border-color: var(--primary-color-dark, #55379e);
+}
