@@ -1,22 +1,35 @@
-/* --- Section Header & Action Buttons --- */
 .section-header {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 1.5rem; /* var(--list-gap-lg) */
+    margin-bottom: 1.5rem;
 }
 
-/* --- Table Styles --- */
-.table-container {
-    background: var(--list-white);
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius-md);
-    overflow: hidden;
+.table-wrapper {
+    position: relative;
+    flex: 1;
+    min-height: 0; /* Fix for flexbox overflow issue */
 }
 
 .tickets-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.9rem; /* var(--list-font-lg) */
+    font-size: 0.9rem;
+}
+
+.no-tickets {
+    padding: 3rem;
+    text-align: center;
+    color: var(--text-color-muted);
+}
+
+.table-container {
+    background: var(--list-white);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .tickets-table th, .tickets-table td {
@@ -28,7 +41,7 @@
 .tickets-table th {
     background-color: var(--list-hover-bg);
     font-weight: 600;
-    font-size: 0.8rem; /* var(--list-font-sm) */
+    font-size: 0.8rem;
     color: var(--text-color-muted);
     text-transform: uppercase;
 }
@@ -41,7 +54,12 @@
     background-color: var(--list-hover-bg);
 }
 
-/* --- Pagination & Table Footer --- */
+.table-content-wrapper {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
 .table-footer {
     display: flex;
     justify-content: center;
@@ -50,6 +68,7 @@
     padding: 1rem;
     border-top: 1px solid var(--border-color);
     background-color: var(--list-hover-bg);
+    flex-shrink: 0;
 }
 
 .pagination-btn {
@@ -61,7 +80,7 @@
     cursor: pointer;
     font-weight: 500;
     font-size: 0.875rem;
-    transition: all 0.2s ease; /* var(--list-transition-all) */
+    transition: all 0.2s ease;
 }
 
 .pagination-btn:hover:not(:disabled) {
@@ -79,11 +98,4 @@
 .pagination-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-}
-
-/* --- Empty State --- */
-.no-tickets {
-    padding: 3rem;
-    text-align: center;
-    color: var(--text-color-muted);
 }

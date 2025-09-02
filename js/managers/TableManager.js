@@ -9,44 +9,64 @@ export default class TableManager {
             columns: [],
             actions: [],
             rowsPerPage: 8,
+            maxPageButtons: 5,
             emptyMessage: "No data available.",
             data: [],
             filters: [],
-            sorters: []
+            sorters: [],
+            dataMode: 'client',
+            onStateChange: null
         };
 
         this.config = { ...defaultConfig, ...config };
-
         this.currentPage = 1;
+        this.totalRecords = this.config.data.length;
 
         this.render();
         this._createModalContainer();
         this._attachEventListeners();
     }
 
-    updateData(newData) {
+    updateData(newData, totalRecords) {
         this.config.data = newData;
-        this.currentPage = 1;
+        if (this.config.dataMode === 'server') {
+            this.totalRecords = totalRecords;
+        } else {
+            this.currentPage = 1;
+            this.totalRecords = newData.length;
+        }
         this.render();
     }
 
     updateFilters(newFilters) {
         this.config.filters = newFilters;
         this.currentPage = 1;
-        this.render();
+        this._requestStateUpdate();
     }
 
     updateSorters(newSorters) {
         this.config.sorters = newSorters;
         this.currentPage = 1;
-        this.render();
+        this._requestStateUpdate();
+    }
+
+    _requestStateUpdate() {
+        if (this.config.dataMode === 'server' && this.config.onStateChange) {
+            this.config.onStateChange({
+                page: this.currentPage,
+                filters: this.config.filters,
+                sorters: this.config.sorters,
+                rowsPerPage: this.config.rowsPerPage
+            });
+        } else {
+            this.render();
+        }
     }
 
     _processData() {
         let processedData = [...this.config.data];
         const { filters, sorters } = this.config;
 
-        // Apply filters
         if (filters && filters.length > 0) {
             processedData = processedData.filter(item => {
                 return filters.every(filter => {
@@ -62,7 +82,6 @@ export default class TableManager {
             });
         }
 
-        // Apply sorters
         if (sorters && sorters.length > 0) {
             processedData.sort((a, b) => {
                 for (const sorter of sorters) {
@@ -94,29 +113,41 @@ export default class TableManager {
     }
 
     render() {
-        const processedData = this._processData();
-        const totalPages = Math.ceil(processedData.length / this.config.rowsPerPage);
-        this.currentPage = Math.max(1, Math.min(this.currentPage, totalPages));
+        let dataToRender;
+        let totalPages;
 
-        const startIndex = (this.currentPage - 1) * this.config.rowsPerPage;
-        const endIndex = startIndex + this.config.rowsPerPage;
-        const dataToRender = processedData.slice(startIndex, endIndex);
+        if (this.config.dataMode === 'server') {
+            dataToRender = this.config.data;
+            totalPages = Math.ceil(this.totalRecords / this.config.rowsPerPage);
+            this.currentPage = Math.max(1, Math.min(this.currentPage, totalPages || 1));
+        } else {
+            const processedData = this._processData();
+            this.totalRecords = processedData.length;
+            totalPages = Math.ceil(this.totalRecords / this.config.rowsPerPage);
+            this.currentPage = Math.max(1, Math.min(this.currentPage, totalPages || 1));
+
+            const startIndex = (this.currentPage - 1) * this.config.rowsPerPage;
+            const endIndex = startIndex + this.config.rowsPerPage;
+            dataToRender = processedData.slice(startIndex, endIndex);
+        }
 
         const tableHeader = this._createHeader();
         const tableBody = this._createBody(dataToRender);
         const tableFooter = this._createFooter(totalPages);
-        const emptyState = this._createEmptyState(dataToRender.length);
 
-        this.container.innerHTML = `
-            <div class="table-container" style="display: ${processedData.length > 0 ? 'block' : 'none'};">
-                <table class="tickets-table">
-                    ${tableHeader}
-                    ${tableBody}
-                </table>
+        if (this.totalRecords > 0) {
+            this.container.innerHTML = `
+                <div class="table-content-wrapper">
+                    <table class="tickets-table">
+                        ${tableHeader}
+                        ${tableBody}
+                    </table>
+                </div>
                 ${tableFooter}
-            </div>
-            ${emptyState}
-        `;
+            `;
+        } else {
+            this.container.innerHTML = this._createEmptyState();
+        }
 
         this._updateHeaderBadges();
     }
@@ -175,9 +206,9 @@ export default class TableManager {
     }
 
     _createFooter(totalPages) {
-        if (totalPages <= 1) return '';
         let pageButtons = '';
-        const maxPageButtons = 5;
+        const maxPageButtons = this.config.maxPageButtons;
+
         let startPage = Math.max(1, this.currentPage - Math.floor(maxPageButtons / 2));
         let endPage = Math.min(totalPages, startPage + maxPageButtons - 1);
 
@@ -200,8 +231,8 @@ export default class TableManager {
         `;
     }
 
-    _createEmptyState(dataLength) {
-        return `<div class="no-tickets" style="display: ${dataLength === 0 ? 'block' : 'none'};">${this.config.emptyMessage}</div>`;
+    _createEmptyState() {
+        return `<div class="no-tickets">${this.config.emptyMessage}</div>`;
     }
 
     _attachEventListeners() {
@@ -209,16 +240,11 @@ export default class TableManager {
             const pageBtn = e.target.closest('.pagination-btn');
             if (pageBtn && !pageBtn.disabled) {
                 this.currentPage = parseInt(pageBtn.dataset.page, 10);
-                this.render();
+                this._requestStateUpdate();
                 return;
             }
-
-            // Note: Action button handlers are now attached directly via onclick attributes
-            // for simplicity, as per the user-provided example.
         });
     }
-
-    // --- Modal Management ---
 
     _createModalContainer() {
         if (document.getElementById('modalContainer')) return;

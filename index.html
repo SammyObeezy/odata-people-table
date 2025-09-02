@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/modal.css">
     <link rel="stylesheet" href="css/table.css">
+    <link rel="stylesheet" href="css/loading.css">
     <link rel="stylesheet" href="css/table-controls.css">
 </head>
 
@@ -48,9 +49,14 @@
                     </div>
                 </div>
 
-                <!-- The container where the dynamic table will be injected -->
-                <div id="table-container">
-                    <!-- TableManager.js will render the table here -->
+                <div class="table-wrapper">
+                    <!-- The loading overlay will be controlled by app.js -->
+                    <div id="loading-overlay" class="loading-overlay" style="display: none;">
+                        <div class="spinner"></div>
+                    </div>
+                    <!-- The container where the dynamic table will be injected. It needs the class for styling. -->
+                    <div id="table-container" class="table-container">
+                    </div>
                 </div>
 
             </section>
